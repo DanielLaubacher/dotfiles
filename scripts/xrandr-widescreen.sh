@@ -1,3 +1,9 @@
+xrandr --output "HDMI-1-0" --off
+xrandr --output "DP-1-0" --off
+xrandr --output "DP-1-1" --off
+xrandr --output "DP-1-2" --off
+xrandr --output "DP-1-3" --off
+
 xrandr --output "eDP1" --mode 1920x1080 --left-of "HDMI-1-0"
 xrandr --output "HDMI-1-0" --mode 3440x1440 --right-of "eDP1" # HDMI
 xrandr --output "DP-1-0" --mode 3440x1440 --right-of "eDP1" # USB-C

@@ -14,7 +14,7 @@ function create_cd_aliases
             set folder_name (basename $dir)
 
             # Create an alias
-            alias "cd$folder_name" "cd $dir"
+            alias "'cd$folder_name'" "cd '$dir'"
         end
     end
 end
