@@ -131,7 +131,7 @@ require('telescope').setup {
 
 require'nvim-treesitter.configs'.setup {
   -- One of "all", or a list of languages
-  ensure_installed = {"vim", "json", "scss", "rust", "typescript", "go", "css", "html", "scss", "javascript", "python", "lua", "bash" },
+  ensure_installed = { "vim", "json", "scss", "rust", "typescript", "go", "css", "html", "scss", "javascript", "python", "lua", "bash", "templ" },
 
   -- Install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,
@@ -1504,3 +1504,38 @@ command! -nargs=1 -complete=command -bar -range Redir silent call Redir(<q-args>
 "autocmd QuickFixCmdPost    l* nested lwindow
 
 let g:highlightedyank_highlight_duration = 1000
+
+function! ReplaceCaseVariants(find, replace) range
+  let find_escaped = escape(a:find, '/\')
+  let replace_escaped = escape(a:replace, '/\')
+
+  let find_lc = tolower(find_escaped)
+  let find_uc = toupper(find_escaped)
+  let find_cap = substitute(find_escaped, '^.', '\u\0', '')
+
+  let repl_lc = tolower(replace_escaped)
+  let repl_uc = toupper(replace_escaped)
+  let repl_cap = substitute(replace_escaped, '^.', '\u\0', '')
+
+  if mode() =~# 'v'
+    let range = "'<,'>"
+  else
+    let range = '%'
+  endif
+
+  " Attempt each substitution, suppressing 'pattern not found' errors
+  for [pat, rep] in [
+        \ [find_lc, repl_lc],
+        \ [find_cap, repl_cap],
+        \ [find_uc, repl_uc]
+        \ ]
+    try
+      execute range . 's/\C' . pat . '/' . rep . '/g'
+    catch /E486/ " Pattern not found
+      " Do nothing, or optionally echo a quiet message:
+      " echomsg 'Pattern "' . pat . '" not found'
+    endtry
+  endfor
+endfunction
+
+command! -nargs=+ -range Replace call ReplaceCaseVariants(<f-args>)

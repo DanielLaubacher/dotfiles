@@ -1,35 +1,7 @@
 #!/bin/bash
 
-list_cards() {
-  pacmd list-cards | grep -e "index:" -e "active profile" | \
-    awk -F ": " '
-         /index:/{idx=$2}
-         /active profile:/{name=$2}
-         {
-           if (length(name) && name != seen) {print idx " " name}
-           seen=name
-          }
-         ' | \
-    sed 's/["<>]//g'
+    1 hexdump -C http.wasm | head -n1 | grep "00 61 73 6d 0a 00 00 00" # wasm component¬
+  6   hexdump -C http.wasm | head -n1 | grep "00 61 73 6d 01 00 00 00" # regular wasm¬
+is_wasm() {
+  hexdump -C $1 | head -n1 | grep "00000000  00 61 73 6d"
 }
-
-set_default_card() {
-    local card_name="$1"
-    local card_index=$(echo "$card_name" | awk '{print $1}')
-
-    pacmd set-card-profile "$card_name"
-    pacmd list-sink-inputs | awk '/index:/{print $2}' | while read -r stream
-    do
-        pacmd move-sink-input "$stream" "$card_index"
-    done
-    echo "Default audio card set to \"$card_name\"."
-}
-
-# Main script logic
-card_name=$(list_cards | rofi -dmenu -i -p "Select Audio card:")
-
-if [ -n "$card_name" ]; then
-    set_default_card "$card_name"
-else
-    echo "No card selected or rofi closed."
-fi
