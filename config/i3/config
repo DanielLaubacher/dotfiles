@@ -102,7 +102,7 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+bindsym $mod+p focus parent
 
 # focus the child container
 #bindsym $mod+d focus child
@@ -119,6 +119,7 @@ bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/toggle_btop.sh
 bindsym $mod+g exec --no-startup-id ~/.config/i3/scripts/toggle_chatgpt.sh
 bindsym $mod+0 exec --no-startup-id ~/.config/i3/scripts/toggle_kitty.sh
 bindsym $mod+c exec --no-startup-id ~/.config/i3/scripts/toggle_claude.sh
+bindsym $mod+a exec --no-startup-id ~/.config/i3/scripts/toggle_abacus.sh
 bindsym $mod+z exec --no-startup-id ~/.config/i3/scripts/toggle_hide.sh
 
 # Define names for default workspaces for which we configure key bindings later on.
